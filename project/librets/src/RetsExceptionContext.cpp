@@ -26,11 +26,14 @@ RetsExceptionContext::RetsExceptionContext()
 {
 }
 
-RetsExceptionContext::RetsExceptionContext(const string & fileName,
-                                           int lineNumber)
+RetsExceptionContext::RetsExceptionContext(const string & fileName, int lineNumber)
 {
-    fs::path path(fileName, fs::native);
-    mFileName = path.leaf();
+    fs::path path(fileName);
+    #if BOOST_FILESYSTEM_VERSION < 3
+    mFileName = path.filename();
+    #else
+    mFileName = path.filename().string();
+    #endif
     mLineNumber = lineNumber;
 }
 
